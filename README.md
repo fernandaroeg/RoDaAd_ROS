@@ -1,2 +1,2 @@
-# RoDaAd_ROS
-Robotics_DataSets_Adapter_for_ROS
+# Robotics_DataSets_Adapter_for_ROS
+This repository presents a series of scripts to transform data available in public robotic datasets to be used in ROS

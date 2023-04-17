@@ -40,7 +40,7 @@ with open(file_tstamps,'r') as tstamps_file:
         tstamp.append(breaking_lines[8]) #tstamp data in 9th row
     for item in range(0,len(tstamp)):
         mrpt_tstamp = int(tstamp[item]) #MRPT TTimeStamp format must be converted to ROS compatible timestamps
-        ros_secs = (mrpt_tstamp/10000000) - (11644473600) #formulas taken from: http://docs.ros.org/en/jade/api/mrpt_bridge/html/time_8h_source.html#l00027
+        ros_secs = int((mrpt_tstamp/10000000) - (11644473600)) #formulas taken from: http://docs.ros.org/en/jade/api/mrpt_bridge/html/time_8h_source.html#l00027
         ros_nsecs =  (mrpt_tstamp % 10000000) * 100
         tstamp[item]=rospy.Time(ros_secs,ros_nsecs)#turning the timestamp values to timestamp object
     
@@ -94,10 +94,10 @@ for i in range(0,len(poseX)):
     g_truth_pose = create_pose_stamped(poseX[i], poseY[i], poseTheta[i], tstamp[i], i)
 
     #Create TF data msg
-    #g_truth_path_tf = create_TFmsg(poseX[i], poseY[i], 0, poseTheta[i], "/map", "/Path",tstamp[i], i)
+    g_truth_path_tf = create_TFmsg(poseX[i], poseY[i], 0, poseTheta[i], "/map", "/Path",tstamp[i], i)
  
     #Write data to bag
-    #bag.write("/tf", g_truth_path_tf, tstamp[i])
+    bag.write("/tf", g_truth_path_tf, tstamp[i])
     bag.write("/g_truth", path, tstamp[i])
     bag.write("/g_truth/Pose", g_truth_pose, tstamp[i])
     

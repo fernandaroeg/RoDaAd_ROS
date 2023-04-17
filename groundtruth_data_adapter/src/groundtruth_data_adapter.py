@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-#Ubuntu 16.04, ROS Kinetic, python 2.7
+#Ubuntu 20.04, ROS Noetic, python 3
 import rospy
 import rosbag
 from nav_msgs.msg import Path

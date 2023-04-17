@@ -12,6 +12,7 @@
 #include<random>
 #include <chrono>
 //NODE that suscribes to topic with groundtruth pose data and injects gaussian noise to it, and publishes in odom topic
+//Ubuntu 20.04, ROS Noetic
 
 //GLOBAL VARIABLES
 float var_x, var_y, var_theta;
@@ -71,9 +72,9 @@ int main(int argc, char **argv)
 	ros::NodeHandle nh;
 	
 	//Declare publishers and suscriber
-	ros::Subscriber sub             = nh.subscribe("g_truth/Pose", 1000, poseCallback);
-	ros::Publisher  odom_pub        = nh.advertise<nav_msgs::Odometry>("odom", 1000); 
-	ros::Publisher  path_pub        = nh.advertise<nav_msgs::Path>("trajectory",1000);
+	ros::Subscriber sub                  = nh.subscribe("g_truth/Pose", 1000, poseCallback);
+	ros::Publisher  odom_pub         = nh.advertise<nav_msgs::Odometry>("odom", 1000); 
+	ros::Publisher  path_pub           = nh.advertise<nav_msgs::Path>("trajectory",1000);
 	ros::Publisher  path_pub_gtruth = nh.advertise<nav_msgs::Path>("trajectory_gtruth",1000);
 	ros::Publisher  init_pose_pub   = nh.advertise<geometry_msgs::PoseWithCovarianceStamped>("initialpose",1000,true); //latch topic
 	ros::Publisher  odom_pose_pub   = nh.advertise<geometry_msgs::PoseStamped>("odom_pose",1000); 
@@ -122,7 +123,7 @@ int main(int argc, char **argv)
 				initialpose_msg.pose.covariance[28] = 999;
 				initialpose_msg.pose.covariance[35] = var_theta*2;
 				init_pose_pub.publish(initialpose_msg);
-				prev_time = current_time;
+				prev_time = current_time;				
 			}
 		else
 			{		

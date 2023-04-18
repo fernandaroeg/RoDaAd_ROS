@@ -61,5 +61,6 @@ Select the desired environment map and run inside the folder:
 	rosrun mrpt_map map_server_node map.simplemap
   
 Visualize in rviz the map selecting /map as fixed frame
+![Rviz maps](rviz_mrpt_map_all_env.png)
 
 

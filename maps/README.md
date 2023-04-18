@@ -8,6 +8,7 @@ Inside each folder there are 5 files to launch the files either using mrpt_map n
 2. yaml file: metadata and pgm image name 
 
 **mrpt_map**
+
 3. map.simplemap file 
 4. environment_name.simpe	file is a copy of the previous file 
 5. map.ini map metadata file 

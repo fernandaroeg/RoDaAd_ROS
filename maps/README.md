@@ -1,7 +1,7 @@
 # Map Files
 
 There are four folders corresponding to each one of the environments in the Robo@Home dataset with the map files for each: alma, pare, rx2 and sarmis. 
-Inside each folder there are 5 files to launch the files either using mrpt_map node or ROS's navigation stack node map_server:
+Inside each folder there are 5 files to launch the files either using mrpt_map node or the map_server from the ROS's navigation stack.
 
 **map_server**
 1. pgm file: encoded data of the occupancy grid map as a grayscale image

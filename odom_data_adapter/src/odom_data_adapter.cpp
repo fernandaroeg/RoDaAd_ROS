@@ -75,7 +75,7 @@ int main(int argc, char **argv)
 	ros::Subscriber sub                  = nh.subscribe("g_truth/Pose", 1000, poseCallback);
 	ros::Publisher  odom_pub         = nh.advertise<nav_msgs::Odometry>("odom", 1000); 
 	ros::Publisher  path_pub           = nh.advertise<nav_msgs::Path>("trajectory",1000);
-	ros::Publisher  path_pub_gtruth = nh.advertise<nav_msgs::Path>("trajectory_gtruth",1000);
+	//ros::Publisher  path_pub_gtruth = nh.advertise<nav_msgs::Path>("trajectory_gtruth",1000);
 	ros::Publisher  init_pose_pub   = nh.advertise<geometry_msgs::PoseWithCovarianceStamped>("initialpose",1000,true); //latch topic
 	ros::Publisher  odom_pose_pub   = nh.advertise<geometry_msgs::PoseStamped>("odom_pose",1000); 
 	tf::TransformBroadcaster odom_broadcaster;
@@ -236,16 +236,16 @@ int main(int argc, char **argv)
 		odom_pose_pub.publish(odom_pose_stamped);
 		
 		//create path msg w/ground truth information
-		geometry_msgs::PoseStamped groundtruth_pose_stamped;
-		groundtruth_pose_stamped.pose.position.x  = x;
-		groundtruth_pose_stamped.pose.position.y  = y;
-		groundtruth_pose_stamped.pose.orientation = g_truth_quat;
-		groundtruth_pose_stamped.header.stamp     = current_time;
-		groundtruth_pose_stamped.header.frame_id  = "map";
-		groundtruth_path.poses.push_back(groundtruth_pose_stamped);
-		groundtruth_path.header.stamp = current_time;
-		groundtruth_path.header.frame_id = "map";
-		path_pub_gtruth.publish(groundtruth_path);
+		//geometry_msgs::PoseStamped groundtruth_pose_stamped;
+		//groundtruth_pose_stamped.pose.position.x  = x;
+		//groundtruth_pose_stamped.pose.position.y  = y;
+		//groundtruth_pose_stamped.pose.orientation = g_truth_quat;
+		//groundtruth_pose_stamped.header.stamp     = current_time;
+		//groundtruth_pose_stamped.header.frame_id  = "map";
+		//groundtruth_path.poses.push_back(groundtruth_pose_stamped);
+		//groundtruth_path.header.stamp = current_time;
+		//groundtruth_path.header.frame_id = "map";
+		//path_pub_gtruth.publish(groundtruth_path);
 				
 		r.sleep();
 		prev_time = current_time;

@@ -93,7 +93,7 @@ for i in range(0,len(poseX)):
  
     #Write data to bag
     bag.write("tf", g_truth_path_tf, tstamp[i])
-    bag.write("Path", path, tstamp[i])
+    bag.write("Path_gtruth", path, tstamp[i])
     bag.write("g_truth/Pose", g_truth_pose, tstamp[i])
     
 bag.close() #export rosbag file to /home/user/.ros 

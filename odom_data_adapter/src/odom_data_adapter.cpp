@@ -74,7 +74,7 @@ int main(int argc, char **argv)
 	//Declare publishers and suscriber
 	ros::Subscriber sub                  = nh.subscribe("g_truth/Pose", 1000, poseCallback);
 	ros::Publisher  odom_pub         = nh.advertise<nav_msgs::Odometry>("odom", 1000); 
-	ros::Publisher  path_pub           = nh.advertise<nav_msgs::Path>("trajectory",1000);
+	ros::Publisher  path_pub           = nh.advertise<nav_msgs::Path>("Path_odom",1000);
 	//ros::Publisher  path_pub_gtruth = nh.advertise<nav_msgs::Path>("trajectory_gtruth",1000);
 	ros::Publisher  init_pose_pub   = nh.advertise<geometry_msgs::PoseWithCovarianceStamped>("initialpose",1000,true); //latch topic
 	ros::Publisher  odom_pose_pub   = nh.advertise<geometry_msgs::PoseStamped>("odom_pose",1000); 
@@ -92,10 +92,9 @@ int main(int argc, char **argv)
 	nav_msgs::Path path, groundtruth_path;
 	
 	//Node frequency
-	ros::Rate r(10.0);
+	ros::Rate r(10);
 	
 	while(nh.ok()){
-		ros::spinOnce();  //check for incoming messages
 		current_time = ros::Time::now(); //get current time
 		
 		//Determine current and previous poses
@@ -246,7 +245,8 @@ int main(int argc, char **argv)
 		//groundtruth_path.header.stamp = current_time;
 		//groundtruth_path.header.frame_id = "map";
 		//path_pub_gtruth.publish(groundtruth_path);
-				
+		
+		ros::spinOnce();  //check for incoming messages
 		r.sleep();
 		prev_time = current_time;
 	}

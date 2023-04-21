@@ -26,7 +26,7 @@ Visualize in rviz the groundtruth path and TF selecting /map as fixed frame and 
 
 By running the command in the location where the bag files are located: 
 
-	rqt_bag file name 
+	rqt_bag filename 
 
 It is possible to inspect the contents of the bag files. 
 ![Gtruth Bag](gtruth_bag.png)

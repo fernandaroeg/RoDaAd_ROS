@@ -1,7 +1,7 @@
 # Odom Data Adapter
 
 This node subscribes to the topic "g_truth/Pose" previously recorded in a bag file using the groundtruth_adapter code. It adds noise to the 
-groundtruth data in order to simulate odometry noise. The ouput has the following data: 
+groundtruth data in order to simulate odometry noise. The node publishes the following topics: 
 
 -**odom:** Ros odometry message containing pose, pose covariance and twist
 

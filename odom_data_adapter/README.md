@@ -4,10 +4,14 @@ This node subscribes to the topic "g_truth/Pose" previously recorded in a bag fi
 groundtruth data in order to simulate odometry noise. The ouput has the following data: 
 
 -**odom:** Ros odometry message containing pose, pose covariance and twist
+
 -**Path_odom:** Ros path message to visualize graphicallly the odom path in Rviz
+
 -**initialpose:** Initial pose of the robot which is injected with a noise value related to the one injecte to the odometry. This value is 
 used by the amcl node to reduce error in the path estimation.
+
 -**odom_pose:** the pose stamped of the generated odometry
+
 -**tf:** tf value with the relation between odometry and the base_link of the robot  
 	
 In order to run this node the launch file test_odom.launch has to be edited with the desired noise levels and location of the groundtruth bag file. 

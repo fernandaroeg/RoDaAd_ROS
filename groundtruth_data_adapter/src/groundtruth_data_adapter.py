@@ -89,7 +89,7 @@ for i in range(0,len(poseX)):
     path.poses.append(g_truth_pose)
 
     #Create TF data for path drawing 
-    g_truth_path_tf = create_TFmsg(poseX[i], poseY[i], 0, poseTheta[i], "map", "Path",tstamp[i], i)
+    g_truth_path_tf = create_TFmsg(poseX[i], poseY[i], 0, poseTheta[i], "map", "Path_gtruth",tstamp[i], i)
  
     #Write data to bag
     bag.write("tf", g_truth_path_tf, tstamp[i])

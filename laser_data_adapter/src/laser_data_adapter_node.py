@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-#Ubuntu 16.04, ROS Kinetic, python 2.7
+#Ubuntu 20.04LTS, ROS Noetic, python 3
 import rospy
 import rosbag
 from sensor_msgs.msg import LaserScan
@@ -39,7 +39,7 @@ for file in os.listdir(path_laser_logs):
         filenames.append(file) #append in list all text files located in the given path_laser_logs
         
 num_files = len(filenames)
-print 'There are', num_files, 'laser txt files in the folder path_laser_logs'
+print('There are', num_files, 'laser txt files in the folder path_laser_logs')
 filenames.sort(key=lambda f: int(filter(str.isdigit, f))) #order files names in natural ascending order
 
 #4. Function to populate ROS LaserMsg format with relevant data
@@ -106,9 +106,11 @@ for file in range(num_files):
         map_r_values = map(float, range_values_list)
         range_values = list(map_r_values)
         num_scans = len(range_values)
-        print "There are ", num_scans, "scanner readings in txt file", file
+        print ("There are ", num_scans, "scanner readings in txt file", file)
+        
         laser_msg = fill_laser_msg(range_values, laser_aperture, file,num_scans, tstamp[file])  #call function to fill laser data
         tf_data = laser_tf_msg(file,tstamp[file])#call function to generate TF laser data
+        
     bag.write("/tf", tf_data, tstamp[file])
     bag.write("/scan", laser_msg, tstamp[file])
 

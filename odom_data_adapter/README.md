@@ -5,9 +5,9 @@ groundtruth data in order to simulate odometry noise. The node publishes the fol
 
 * **odom:** Ros odometry message containing pose, pose covariance and twist
 
-* **Path_odom:** Ros path message to visualize graphicallly the odom path in Rviz
+* **Path_odom:** Ros path message to visualize graphically the odom path in Rviz
  
-* **initialpose:** Initial pose of the robot which is injected with a noise value related to the one injecte to the odometry. This value is 
+* **initialpose:** Initial pose of the robot which is injected with a noise value related to the one injected to the odometry. This value is 
 used by the amcl node to reduce error in the path estimation.
  
 * **odom_pose:** the pose stamped of the generated odometry

@@ -48,10 +48,10 @@ The data published by this node was recorded in bag files by using the command
 	rosbag record topics 
 
 The image of the generated odom path with noise in x, y and theta for all environments can be seen in:
-![Rviz odom](.png)
+![Rviz odom](odom_all_env_x0.5y0.5th0.1.png)
 
-The tf tree for the generated data with groundtruth looks like:
-![Tf tree odom](.png)
+The tf tree for the generated data looks like:
+![Tf tree odom](odom_frames.png)
 
 The tf between odom and map is not set as this value will be eventually published by the amcl node. 
 

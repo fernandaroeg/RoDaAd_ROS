@@ -8,6 +8,7 @@ from math import pi
 from tf2_msgs.msg import TFMessage 
 from geometry_msgs.msg import TransformStamped
 import tf
+import re
 
 ###ROS LaserScan message format###
 # std_msgs/Header header
@@ -40,7 +41,8 @@ for file in os.listdir(path_laser_logs):
         
 num_files = len(filenames)
 print('There are', num_files, 'laser txt files in the folder path_laser_logs')
-filenames.sort(key=lambda f: int(filter(str.isdigit, f))) #order files names in natural ascending order
+#filenames.sort(key=lambda f: filter(str.isdigit, f) ) #order files names in natural ascending order
+filenames.sort(key=lambda f: int(re.sub('\D', '', f))) #order files names in natural ascending order, py3
 
 #4. Function to populate ROS LaserMsg format with relevant data
 def fill_laser_msg(laser_values, aperture, num_txt_file, num_readings, t):  
@@ -89,7 +91,7 @@ with open(file_laser_tstamps,'r') as tstamps_file:
         tstamp.append(breaking_lines[8]) #tstamp data in 8th row
     for item in range(0,len(tstamp)):
         mrpt_tstamp = int(tstamp[item]) #MRPT TTimeStamp format must be converted to ROS compatible timestamps
-        ros_secs = (mrpt_tstamp/10000000) - (11644473600) #formulas taken from: http://docs.ros.org/en/jade/api/mrpt_bridge/html/time_8h_source.html#l00027
+        ros_secs = int(mrpt_tstamp/10000000) - (11644473600) #formulas taken from: http://docs.ros.org/en/jade/api/mrpt_bridge/html/time_8h_source.html#l00027
         ros_nsecs =  (mrpt_tstamp % 10000000) * 100
         tstamp[item]=rospy.Time(ros_secs,ros_nsecs)#turning the timestamp values to timestamp object
 

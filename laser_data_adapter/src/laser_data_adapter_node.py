@@ -65,8 +65,7 @@ def laser_tf_msg(seq, t):
     trans = TransformStamped()
     trans.header.seq = seq
     trans.header.stamp = t
-    #trans.header.frame_id = 'base_link'
-    trans.header.frame_id = 'Path_gtruth'
+    trans.header.frame_id = 'base_link'
     trans.child_frame_id = 'laser'
     trans.transform.translation.x = 0.205 #laser position in m, from dataset paper http://mapir.uma.es/papersrepo/2017/2017-raul-IJRR-Robot_at_home_dataset.pdf
     trans.transform.translation.y = 0.0

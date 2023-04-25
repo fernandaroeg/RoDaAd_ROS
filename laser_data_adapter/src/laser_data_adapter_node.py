@@ -49,12 +49,12 @@ def fill_laser_msg(laser_values, aperture, num_txt_file, num_readings, t):
     laser_msg = LaserScan()
     laser_msg.header.seq = num_txt_file
     laser_msg.header.stamp = t
-    laser_msg.header.frame_id = '/laser' #transform frame name
-    laser_msg.angle_min = aperture * -0.5 #formulas (lines 50-54) taken from https://github.com/mrpt-ros-pkg/mrpt_bridge/blob/ros1/src/laser_scan.cpp
+    laser_msg.header.frame_id = 'laser' #transform frame name
+    laser_msg.angle_min = aperture * -0.5 #formulas (lines 50-54) taken from https://github.com/mrpt-ros-pkg/mrpt_bridge/blob/master/src/laser_scan.cpp
     laser_msg.angle_max = aperture *  0.5  
     laser_msg.angle_increment = aperture/(num_readings-1)
-    laser_msg.time_increment = 1/30 
-    laser_msg.scan_time = 0.0 
+    laser_msg.time_increment = 1/1000000000 #fix rviz visualization according to: https://answers.ros.org/question/351704/transform-senderunknown_publisher-unknown-reason-for-transform-failure/
+    laser_msg.scan_time = 1/1000000000
     laser_msg.range_min = 0.06 # taken from URG-04LX-UG01 hokuyo laser datasheet https://hokuyo-usa.com/application/files/5115/8947/8197/URG-04LX-UG01_Specifications_Catalog.pdf
     laser_msg.range_max = 4.0  # taken from URG-04LX-UG01 hokuyo laser datasheet
     laser_msg.ranges = laser_values
@@ -65,8 +65,9 @@ def laser_tf_msg(seq, t):
     trans = TransformStamped()
     trans.header.seq = seq
     trans.header.stamp = t
-    trans.header.frame_id = '/base_link'
-    trans.child_frame_id = '/laser'
+    #trans.header.frame_id = 'base_link'
+    trans.header.frame_id = 'Path_gtruth'
+    trans.child_frame_id = 'laser'
     trans.transform.translation.x = 0.205 #laser position in m, from dataset paper http://mapir.uma.es/papersrepo/2017/2017-raul-IJRR-Robot_at_home_dataset.pdf
     trans.transform.translation.y = 0.0
     trans.transform.translation.z = 0.31
@@ -96,13 +97,14 @@ with open(file_laser_tstamps,'r') as tstamps_file:
         tstamp[item]=rospy.Time(ros_secs,ros_nsecs)#turning the timestamp values to timestamp object
 
 #7.  Open bag file to write data in it 
-bag = rosbag.Bag('laser_data_'+scenario+'.bag', 'w')
+bag = rosbag.Bag('laser_'+scenario+'.bag', 'w')
 
 #8. Extract  laser data from multiple text files (one text file for each scan with multiple laser readings )
 for file in range(num_files):
     with open (path_laser_logs+filenames[file], 'r') as myfile:
         data = myfile.readlines()
         laser_aperture = float(data[7])
+        print("laser aperture is ", laser_aperture)
         range_values = data[10]
         range_values_list= range_values.split()
         map_r_values = map(float, range_values_list)
@@ -113,8 +115,8 @@ for file in range(num_files):
         laser_msg = fill_laser_msg(range_values, laser_aperture, file,num_scans, tstamp[file])  #call function to fill laser data
         tf_data = laser_tf_msg(file,tstamp[file])#call function to generate TF laser data
         
-    bag.write("/tf", tf_data, tstamp[file])
-    bag.write("/scan", laser_msg, tstamp[file])
+    bag.write("tf", tf_data, tstamp[file])
+    bag.write("laser", laser_msg, tstamp[file])
 
 
 bag.close() #export rosbag file to /home/user/.ros 

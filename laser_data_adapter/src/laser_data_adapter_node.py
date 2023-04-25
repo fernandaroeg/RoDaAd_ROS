@@ -103,7 +103,6 @@ for file in range(num_files):
     with open (path_laser_logs+filenames[file], 'r') as myfile:
         data = myfile.readlines()
         laser_aperture = float(data[7])
-        print("laser aperture is ", laser_aperture)
         range_values = data[10]
         range_values_list= range_values.split()
         map_r_values = map(float, range_values_list)

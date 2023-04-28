@@ -1,9 +1,9 @@
 # Laser Data Adapter
 
 In the data section, there are 3 folders corresponding to the environments in the Robo@Home dataset: alma, pare and rx2. 
-Inside each folder there is a folder with the laser readings and a log file with the timestamps for each laser reading:
+Inside each folder there is a set of files with the laser readings and a log file with the timestamps for each laser reading:
 
-1.  1_hokuyo_processed
+1.  1_hokuyo_processed (folder with laser readings)
 2.  1_hokuyo_processed.txt
 
 The name of these files along with the environment name have to be configured in the launch file in order to compile the bag with the 

@@ -61,11 +61,11 @@ def fill_laser_msg(laser_values, aperture, num_txt_file, num_readings, t):
     return laser_msg
     
  #5. Function to create TF data for laser frame
-def laser_tf_msg(seq, t):
+def laser_tf_msg(seq, t, frame):
     trans = TransformStamped()
     trans.header.seq = seq
     trans.header.stamp = t
-    trans.header.frame_id = 'base_link'
+    trans.header.frame_id = frame
     trans.child_frame_id = 'laser'
     trans.transform.translation.x = 0.205 #laser position in m, from dataset paper http://mapir.uma.es/papersrepo/2017/2017-raul-IJRR-Robot_at_home_dataset.pdf
     trans.transform.translation.y = 0.0
@@ -96,7 +96,7 @@ with open(file_laser_tstamps,'r') as tstamps_file:
         tstamp[item]=rospy.Time(ros_secs,ros_nsecs)#turning the timestamp values to timestamp object
 
 #7.  Open bag file to write data in it 
-bag = rosbag.Bag('laser_'+scenario+'.bag', 'w')
+bag = rosbag.Bag('laser_gtruth_'+scenario+'.bag', 'w')
 
 #8. Extract  laser data from multiple text files (one text file for each scan with multiple laser readings )
 for file in range(num_files):
@@ -110,8 +110,8 @@ for file in range(num_files):
         num_scans = len(range_values)
         print ("There are ", num_scans, "scanner readings in txt file", file)
         
-        laser_msg = fill_laser_msg(range_values, laser_aperture, file,num_scans, tstamp[file])  #call function to fill laser data
-        tf_data = laser_tf_msg(file,tstamp[file])#call function to generate TF laser data
+        laser_msg = fill_laser_msg(range_values, laser_aperture, file,num_scans, tstamp[file])  #call function to fill laser data 
+        tf_data = laser_tf_msg(file,tstamp[file], 'base_link')#call function to generate TF laser data
         
     bag.write("tf", tf_data, tstamp[file])
     bag.write("laser", laser_msg, tstamp[file])

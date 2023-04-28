@@ -111,7 +111,7 @@ for file in range(num_files):
         print ("There are ", num_scans, "scanner readings in txt file", file)
         
         laser_msg = fill_laser_msg(range_values, laser_aperture, file,num_scans, tstamp[file])  #call function to fill laser data 
-        tf_data = laser_tf_msg(file,tstamp[file], 'base_link')#call function to generate TF laser data
+        tf_data = laser_tf_msg(file,tstamp[file], 'base_link')#call function to generate TF laser data from base_link to laser
         
     bag.write("tf", tf_data, tstamp[file])
     bag.write("laser", laser_msg, tstamp[file])

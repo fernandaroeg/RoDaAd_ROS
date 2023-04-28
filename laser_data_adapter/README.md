@@ -1,35 +1,30 @@
-# GroundTruth Data Adapter
+# Laser Data Adapter
 
-In the data section, there are four folders corresponding to the environments in the Robo@Home dataset: alma, pare, rx2 and sarmis. 
-Inside each folder there are 2 files:
+In the data section, there are 3 folders corresponding to the environments in the Robo@Home dataset: alma, pare and rx2. 
+Inside each folder there is a folder with the laser readings and a log file with these readings timestamps:
 
-1.  log_estimated_path.txt
-2.  hokuyo_processed.txt
+1.  1_hokuyo_processed
+2.  1_hokuyo_processed.txt
 
-The log_estimated_path.txt is the file provided by the Robo@Home that contains the recorded pose of the robot during trajectory, and as this
-data is not timestamped the file hokuyo_processed.txt (which is the observation log for the laser scans of the same test) is used to extract the
-timestamps. These files were previously analyzed to see that the number of readings for pose in log_estimated_path and number of laser readings
-in hokuyo_processed matched to avoid synchronization errors, this analysis is presented in the file:
-Dataset_scenarios_logs_gtruth_match
+The name of these files along with the environment name have to be configured in the launch file in order to compile the bag with the 
+laser data.
 
-The bag files can be compiled by running the groundtruth_data_adapter code. The launch file needs to be modified with the name of the 
-environment and the location of the 2 corresponding .txt files. 
+	roslaunch laser_data_adapter compile_laser_data.launch
 
-The generated bag contains the groundtruth data provided in the Robo@Home dataset adapted to the ROS pose message.
-The bag file also contains the path message of the groundtruth data and the required TF data from the map to the path to visualize the groundtruth data
-graphically in Rviz. 
+The generated bag contains the laser data provided in the Robo@Home dataset adapted to the ROS laser message and the required TF data 
+from the base_link to the laser. To visualize the laser data graphically in Rviz you will need to play it along with the AMCL node and odom bag to avoid
+having TF errors or re-compile the laser bag file changing the line 114 in laser_data_adapter_node.py to set the parent frame of the laser to another existing
+frame. For more specific details on the laser_data_adapter please refer to section 5.2 of [file](https://github.com/fernandaroeg/ROS_AMCL_Hybrid_Localization/blob/master/TFM_Localizacion_Rodriguez_Fernanda.pdf)
 
-For more specific details on the groundtruth_data_adapter please refer to section 5.3 of [file](https://github.com/fernandaroeg/ROS_AMCL_Hybrid_Localization/blob/master/TFM_Localizacion_Rodriguez_Fernanda.pdf)
-
-Visualize in rviz the groundtruth path and TF selecting /map as fixed frame and adding Path and TF visualization. 
-![Rviz groundtruth path for all env](gtruth_path_tf_env.png)
+Visualization in rviz of the laser data for the environments alma, pare and rx2: 
+![Rviz laser data](laser_alma_pare_rx2.png)
 
 By running the command in the location where the bag files are located: 
 
 	rqt_bag filename 
 
 It is possible to inspect the contents of the bag files. 
-![Gtruth Bag](gtruth_bag.png)
+![Gtruth Bag](rqt_bag_laser.png)
 
 
 

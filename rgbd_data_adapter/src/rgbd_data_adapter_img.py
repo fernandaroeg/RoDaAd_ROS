@@ -33,11 +33,10 @@ import ctypes
 from datetime import datetime
 import re
 
-####CONFIGURABLE PARAMETERS####
-scenario = "alma" #get this data from launch file
-#1. Obtain images from folder
-path_imgs             ="/home/fer/catkin_ws/src/rodaad/rgbd_data_adapter/data/alma/fullhose1_rgbd/"
-file_rgbd_tstamps ="/home/fer/catkin_ws/src/rodaad/rgbd_data_adapter/data/alma/fullhose1_rgbd.txt"
+#File Paths and Parameters
+path_imgs             = rospy.get_param('/rgbd_data_adapter/rgbd_raw_path')
+file_rgbd_tstamps = rospy.get_param('/rgbd_data_adapter/tstamp_file')
+scenario                = rospy.get_param('/rgbd_data_adapter/environment')
 
 #Camera calibration parameters, taken from dataset
 cx = 157.3245865

@@ -8,8 +8,7 @@ Inside each folder there are 2 files:
 
 The log_estimated_path.txt is the file provided by the Robo@Home that contains the recorded pose of the robot during trajectory, and as this
 data is not timestamped the file hokuyo_processed.txt (which is the observation log for the laser scans of the same test) is used to extract the
-timestamps. These files were previously analyzed to see that the number of pose readings in the file log_estimated_path and number of laser readings
-in hokuyo_processed matched to avoid synchronization errors, this analysis is presented in the file:
+timestamps. These files were previously analyzed to see that the number of readings in both files matched to avoid synchronization errors, this analysis is presented in the file:
 Dataset_scenarios_logs_gtruth_match
 
 The generated bags contain the groundtruth data provided in the Robo@Home dataset adapted to the ROS pose  and path messages.

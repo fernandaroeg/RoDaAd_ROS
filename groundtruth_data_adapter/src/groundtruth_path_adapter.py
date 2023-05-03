@@ -52,20 +52,49 @@ def create_pose_stamped(x, y, theta, frame, t, seq):
     quaternion_angle = tf.transformations.quaternion_from_euler(0, 0, theta)
     pose.pose = Pose( Point(x, y, 0.0),  Quaternion(*quaternion_angle) )  
     return pose
+
+def create_TFmsg(x, y, z, theta, frame, child_frame, t, seq):
+    trans = TransformStamped()
+    trans.header.seq = seq
+    trans.header.stamp = t
+    trans.header.frame_id = frame
+    trans.child_frame_id = child_frame
+    trans.transform.translation.x = x
+    trans.transform.translation.y = y
+    trans.transform.translation.z = z
+    q = tf.transformations.quaternion_from_euler(0,0,theta)
+    trans.transform.rotation.x = q[0]
+    trans.transform.rotation.y = q[1]
+    trans.transform.rotation.z = q[2]
+    trans.transform.rotation.w = q[3]
+    msg = TFMessage()
+    msg.transforms.append(trans)
+    return msg
     
 ##### 4. Open bag file to write data in it ####
 #List names with data to write from groundtruth: poseX, poseY, poseTheta, tstamp
-
 #file = open('odom_debug.txt', 'w') #create txt file to export odom data for debugging purposes
-bag = rosbag.Bag('groundtruth_pose'+'_'+scenario+'.bag', 'w')
+
+bag = rosbag.Bag('groundtruth_path'+'_'+scenario+'.bag', 'w')
+path= Path()
 
 for i in range(0,len(poseX)):
 
     #Create pose msg for odometry
     g_truth_pose = create_pose_stamped(poseX[i], poseY[i], poseTheta[i], "g_truth/Pose", tstamp[i], i)
+    
+     #Create path msg to visualize g_truth data path in rviz
+    path.header.seq = i
+    path.header.stamp = tstamp[i]
+    path.header.frame_id = "map"
+    path.poses.append(g_truth_pose)
+
+    #Create TF data for path drawing 
+    g_truth_path_tf = create_TFmsg(poseX[i], poseY[i], 0, poseTheta[i], "map", "base_link",tstamp[i], i)
  
     #Write data to bag
-    bag.write("g_truth/Pose", g_truth_pose, tstamp[i])
+    bag.write("tf", g_truth_path_tf, tstamp[i])
+    bag.write("base_link", path, tstamp[i])
     
 bag.close() #export rosbag file to /home/user/.ros 
 #file.close() #close debugging txt file

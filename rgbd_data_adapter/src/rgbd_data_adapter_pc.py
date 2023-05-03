@@ -33,9 +33,9 @@ import re
 
 
 #File Paths and Parameters
-path_imgs             = rospy.get_param('/rgbd_data_adapter/rgbd_raw_path')
-file_rgbd_tstamps = rospy.get_param('/rgbd_data_adapter/tstamp_file')
-scenario                = rospy.get_param('/rgbd_data_adapter/environment')
+path_imgs             = rospy.get_param('/rgbd_data_adapter_pc/rgbd_raw_path')
+file_rgbd_tstamps = rospy.get_param('/rgbd_data_adapter_pc/tstamp_file')
+scenario                = rospy.get_param('/rgbd_data_adapter_pc/environment')
 
 #Camera calibration parameters, taken from dataset
 cx = 157.3245865

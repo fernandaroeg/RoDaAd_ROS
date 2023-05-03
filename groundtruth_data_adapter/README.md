@@ -18,14 +18,14 @@ The generated files contain the groundtruth data provided in the Robo@Home datas
 	
 	This script compiles the pose message data needed to create the odometry data with the odom_data_adapter node. The output bag does not contains
 	tf data or path message to visualize in rviz.
-	![GroundTruth Pose Data](gtruth_path_bag.png)
+	![GroundTruth Pose Data](gtruth_pose_bag.png)
 	
 2. groundtruth_path_adapter.py
 	
 	This script compiles the path message data neede to visualize the groundtruth path in rviz. The tf data can be changed by modifying lines 93, 97 of the code.
 	 In the example below two bags were compiled one with tf data from map to base_link to test laser data in rviz and the second one from map to gtruth/Path to 
 	 visualize the groundtruth when running the amcl. 
-	![GroundTruth Path Data](gtruth_pose_bag.png)
+	![GroundTruth Path Data](gtruth_path_bag.png)
 	![TF trees for gtruth path](gtruth_path_tftree_cases.png)
 
 For more specific details on the groundtruth_data_adapter please refer to section 5.3 of [file](https://github.com/fernandaroeg/ROS_AMCL_Hybrid_Localization/blob/master/TFM_Localizacion_Rodriguez_Fernanda.pdf)

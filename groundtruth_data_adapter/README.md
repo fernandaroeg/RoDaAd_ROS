@@ -32,13 +32,17 @@ The generated files contain the groundtruth data provided in the Robo@Home datas
 	![GroundTruth Path Data](gtruth_path_bag.png)
 	![TF trees for gtruth path](gtruth_path_tftree_cases.png)
 	
-	To compile data the launch file needs to be modified with the name of the environment and the location of the 2 corresponding .txt files. Then run the following command:
+	To compile the data the launch file needs to be modified with the name of the environment and the location of the 2 corresponding .txt files. Then run the following command:
 		
 		roslaunch groundtruth_data_adapter groundtruth_path_adapter.launch 
 
 For more specific details on the groundtruth_data_adapter please refer to section 5.3 of [file](https://github.com/fernandaroeg/ROS_AMCL_Hybrid_Localization/blob/master/TFM_Localizacion_Rodriguez_Fernanda.pdf)
 
-Visualize in rviz the groundtruth path and TF selecting /map as fixed frame and adding Path and TF visualization. 
+To visualize the data in rviz launch the map and play the groundtruth path bag using the command:
+
+	rosbag play groundtruth_path_scenario.bag 
+	
+Visualize in rviz the groundtruth path by selecting /map as fixed frame and adding Path and TF visualization. 
 ![Rviz groundtruth path for all env](gtruth_path_tf_env.png)
 
 To inspect the contents of the bag files run the following command in the location where the bag files are located: 

@@ -20,7 +20,7 @@ The generated files contain the groundtruth data provided in the Robo@Home datas
 	tf data or path message to visualize in rviz.
 	![GroundTruth Pose Data](gtruth_pose_bag.png)
 	
-	To compile data run the following command:
+	To compile data the launch file needs to be modified with the name of the environment and the location of the 2 corresponding .txt files. Then run the following command:
 		
 		roslaunch groundtruth_data_adapter groundtruth_data_adapter.launch 
 	
@@ -32,7 +32,7 @@ The generated files contain the groundtruth data provided in the Robo@Home datas
 	![GroundTruth Path Data](gtruth_path_bag.png)
 	![TF trees for gtruth path](gtruth_path_tftree_cases.png)
 	
-	To compile data run the following command:
+	To compile data the launch file needs to be modified with the name of the environment and the location of the 2 corresponding .txt files. Then run the following command:
 		
 		roslaunch groundtruth_data_adapter groundtruth_path_adapter.launch 
 

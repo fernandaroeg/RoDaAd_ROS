@@ -31,6 +31,7 @@ It is possible to inspect the contents of the bag files.
 ![Gtruth Bag](rqt_bag_laser.png)
 
 The TF tree when the data is visualized in rviz with the grountruth path file. 
+
 ![TF tree when testing laser data in rviz](tf_laser_testing.png)	
 
 

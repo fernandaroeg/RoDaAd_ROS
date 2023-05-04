@@ -19,12 +19,19 @@ frame. For more specific details on the laser_data_adapter please refer to secti
 Visualization in rviz of the laser data for the environments alma, pare and rx2: 
 ![Rviz laser data](laser_alma_pare_rx2.png)
 
+To visualize the data in rviz launch the map and play the laser bag using the command:
+
+	rosbag play laser_scenario.bag
+
 By running the command in the location where the bag files are located: 
 
 	rqt_bag filename 
 
 It is possible to inspect the contents of the bag files. 
 ![Gtruth Bag](rqt_bag_laser.png)
+
+The TF tree when the data is visualized in rviz with the grountruth path file. 
+![TF tree when testing laser data in rviz](tf_laser_testing.png)	
 
 
 

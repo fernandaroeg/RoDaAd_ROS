@@ -19,9 +19,9 @@ frame. For more specific details on the laser_data_adapter please refer to secti
 Visualization in rviz of the laser data for the environments alma, pare and rx2: 
 ![Rviz laser data](laser_alma_pare_rx2.png)
 
-To visualize the data in rviz launch the map and play the laser bag using the command:
+To visualize the data in rviz launch the map and play the groundtruth path and laser bags using the command:
 
-	rosbag play laser_scenario.bag
+	rosbag play  groundtruth_path_scenario.bag laser_scenario.bag
 
 By running the command in the location where the bag files are located: 
 

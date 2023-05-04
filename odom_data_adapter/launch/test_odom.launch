@@ -5,18 +5,18 @@
 	<!-- Launch Odom_adapter_node -->
 	<node pkg="odom_data_adapter" type="odom_data_adapter" name="odom_data_adapter" output="screen">
 	<!-- 0.5cm x,y 0.1 degree theta-->
-	<param name="var_x"        value="0.000025"/> 
-	<param name="var_y"        value="0.000025"/> 
-	<param name="var_theta" value="0.000003" /> 
+	<param name="var_x"        value="0.0"/> 
+	<param name="var_y"        value="0.0"/> 
+	<param name="var_theta"  value="0.0" />
 	</node>
 	
 	<!--Play groundtruth rosbag -->
-	<arg name="file1"    default="groundtruth_sarmis"/>
-	<arg name="path" default="/home/fer/Desktop/"/>
+	<arg name="file1"    default="groundtruth_pose_pare"/>
+	<arg name="path" default="/home/fer/.ros/"/>
 	<node name="player" pkg="rosbag" type="play" output="screen" args="--clock $(arg path)$(arg file1).bag" />
 
 	<!--Record odom data in rosbag -->
-	<node pkg="rosbag" type="record" name="odom_sarmis_bag" args="record -O odom5_sarmis.bag 
+	<node pkg="rosbag" type="record" name="odom_pare_bag" args="record -O odom1_pare.bag 
 	/odom /initialpose /Path_odom /odom_pose /tf "/>   
 	
 </launch>

@@ -1,0 +1,37 @@
+<launch>	
+    <arg name="scenario"      default="alma" />
+	
+	<!-- Launch Map-->
+    <arg name="map_file"    default="$(arg scenario).yaml"                                               />
+    <arg name="map_path" default="/home/fer/catkin_ws/src/rodaad/maps/$(arg scenario)/"  />
+    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_path)$(arg map_file)" />
+
+	<!-- Static frame from map to odom -->	
+	 <node pkg="tf" type="static_transform_publisher" name="static_tf" args="0 0 0 0 0 0 /map /odom 100"/>
+
+	<!-- Set simulation time to synchronize bag files and node data-->
+	<param name="/use_sim_time" type="bool" value="true"/>
+
+	<!-- Launch Rviz -->
+	<node pkg="rviz" type="rviz" name="rviz" args="-d /home/fer/catkin_ws/src/rodaad/rodaad.rviz">
+	</node>
+
+	<!--Play .bag files in the .ros FOLDER -->
+	<arg name="path" default="/home/fer/.ros/"/>
+	
+	<!-- Play GROUNDTRUTH rosbag -->
+	<arg name="file0" default="groundtruth_path_alma"/>
+	<node name="player0" pkg="rosbag" type="play" output="screen"  args=" $(arg path)$(arg file0).bag" />
+	
+	<!-- Play DEPTH rosbags -->                                                                    
+	<arg name="file2" default="depth1_tfStatic_alma"/>                                       
+	<node name="player2" pkg="rosbag" type="play" output="screen" args="--clock $(arg path)$(arg file2).bag" />
+	
+	<!--4. Play odom-gtruth/laser-depth rosbag-->
+	<arg name="file1" default="laser_alma"/>
+	<arg name="file2" default="odom5_alma"/>
+	<arg name="file3" default="groundtruth_path_alma"/>
+	<arg name="path" default="/home/fer/.ros/"/>
+	<node name="player" pkg="rosbag" type="play" output="screen" args="--clock $(arg path)$(arg file3).bag $(arg path)$(arg file2).bag $(arg path)$(arg file1).bag" />
+			
+</launch>

@@ -30,6 +30,8 @@ Two bag files are created for each one of the 4 RGB-D cameras, a total of 8 file
 The generated bag contains the data provided in the Robo@Home dataset adapted to the ROS message and the required TF data.
 TF tree needs baselink. 
 
+robot labels
+
 imagen, rqt bag, tf
 
 For more specific details on the rgbd_data_adapter please refer to section BBB of 

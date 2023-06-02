@@ -17,6 +17,6 @@
 
 	<!--Record odom data in rosbag -->
 	<node pkg="rosbag" type="record" name="odom_pare_bag" args="record -O odom1_pare.bag 
-	/odom /initialpose /Path_odom /odom_pose /tf "/>   
+	/odom /initialpose /Path_odom /odom_pose /tf "/>  
 	
 </launch>

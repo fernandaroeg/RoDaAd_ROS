@@ -1,5 +1,13 @@
 <launch>
-	<!-- run depth_to_laser node -->
 	<node pkg="rgbd_data_adapter" type="depth_to_laser_adapter.py" name="depth_to_laser_adapter" output="screen">
+
+	<param name="rgbd_id"                      value="1"  />
+	<param name="TF_x"                          value="0.271"  />
+	<param name="TF_y"                          value="-0.031"  />
+	<param name="TF_z"                          value="1.045"  />
+	<param name="TF_yaw"                         value="-45"  />
+	<param name="pc_to_laser_topic"    value="depth"  />
+
 	</node>	
 </launch>
+

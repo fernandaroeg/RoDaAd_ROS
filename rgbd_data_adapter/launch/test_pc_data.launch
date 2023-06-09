@@ -1,0 +1,33 @@
+<launch>	
+    <arg name="scenario"      default="rx2" />
+	
+	<!-- Launch Map-->
+    <arg name="map_file"    default="$(arg scenario).yaml"                                               />
+    <arg name="map_path" default="/home/fer/catkin_ws/src/rodaad/maps/$(arg scenario)/"  />
+    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_path)$(arg map_file)" />
+	
+	<!-- Set simulation time to synchronize bag files and node data-->
+	<param name="/use_sim_time" type="bool" value="true" />             
+
+	<!-- Launch Rviz -->
+	<node pkg="rviz" type="rviz" name="rviz" args="-d /home/fer/catkin_ws/src/rodaad/rodaad.rviz">
+	</node>
+
+	<!--Play .bag files -->
+	<arg name="path" default="/home/fer/.ros/"/>
+	
+	<!-- Play groundtruth rosbag -->
+	<arg name="file0" default="groundtruth_path_rx2"/>
+	<node name="player0" pkg="rosbag" type="play" output="screen"  args="--clock $(arg path)$(arg file0).bag" />
+	
+	<!-- Play laser rosbag -->
+	<arg name="file1" default="laser_rx2"/>
+	<node name="player1" pkg="rosbag" type="play" output="screen"  args=" $(arg path)$(arg file1).bag"/>
+
+	<!-- Play !!!!!!!!!!!RGB-D PointCloud!!!!!!!!!!!!! rosbags -->                                                                    
+	<arg name="file2" default="pc1_rx2_pruebaTF"/>                                       
+	<node name="player2" pkg="rosbag" type="play" output="screen" args=" $(arg path)$(arg file2).bag" />
+		
+	<!--arg name="file6" default="rgbd1_img_alma"/ -->                                       
+	<!--node name="player6" pkg="rosbag" type="play" output="screen" args=" $(arg path)$(arg file6).bag" / -->
+</launch>

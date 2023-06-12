@@ -1,6 +1,6 @@
 # RGB-D Data Adapter
 
-In the data section, there is a folder with a set of png files with the RGB and Depth images traken from the fullhouse trajectory of the robot in the scenarios.
+In the data section, there is a folder with a set of png files with the RGB and Depth images taken from the fullhouse trajectory of the robot in the scenarios.
 There is also a log file with the timestamps for each reading:
 
 1.  fullhouse1_rgbd (folder with images)
@@ -14,14 +14,14 @@ In this file 4  parameters have to be set:
 3. tstamp_file: path to the file with the timestamps
 4. img_type: type of image to be compiled, "intensity" for colored images or "depth" for grayscale depth images.
 
-The CameraInfo is specificied in the source code "rgbd_data_adapter_img.py" with values taken from the dataset
+The CameraInfo is specified in the source code "rgbd_data_adapter_img.py" with values taken from the dataset
 Robo@Home.  The launch file can be run with the command: 
 
 	roslaunch rgbd_data_adapter compile_rgbd_img.launch
 	
 The output is 4 bag files corresponding to each one of the cameras.
-In the following image it can be seen in the left, the content in each bag file with the topics tf, cameraInfo and image, in the 
-middle the image visualization using the rqt_image_view tool, and in the right the tf tree corresponding to this data. 
+In the following image it can be seen in the left, the content in each bag file with the topics tf, cameraInfo and image,
+ and in the right the tf tree corresponding to this data. 
 
 ![rbgd_image](rgbd_img_bag.png)
 

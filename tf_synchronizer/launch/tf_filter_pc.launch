@@ -1,4 +1,0 @@
-<launch>	
-    <node pkg="tf_synchronizer" type="tf_filter_pc" name="tf_filter_pc" output="screen">
-	</node>
-</launch>

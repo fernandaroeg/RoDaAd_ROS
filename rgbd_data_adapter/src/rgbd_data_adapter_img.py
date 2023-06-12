@@ -1,8 +1,8 @@
 #! /usr/bin/env python
 #Ubuntu 20.04, ROS Noetic, python3
-#Script to adapt RGB-D data in png files to ROS msgs in bag file: sensor_msgs/CameraInfo, sensor_msgs/Image for 4 RGB-D cameras
+#Script to adapt RGB-D data in png files to ROS msgs in bag file: sensor_msgs/camera_info, sensor_msgs/Image for 4 RGB-D cameras
 
-###ROS CameraInfo message format###          ###ROS Image message format###          
+###ROS camera_info message format###          ###ROS Image message format###          
 # std_msgs/Header header                                  # std_msgs/Header header                        
 # uint32 height                                                       # uint32 height                                             
 # uint32 width                                                        # uint32 width                                               
@@ -34,9 +34,10 @@ from datetime import datetime
 import re
 
 #File Paths and Parameters
-path_imgs             = rospy.get_param('/rgbd_data_adapter_img/rgbd_raw_path')
+path_imgs              = rospy.get_param('/rgbd_data_adapter_img/rgbd_raw_path')
 file_rgbd_tstamps = rospy.get_param('/rgbd_data_adapter_img/tstamp_file')
-scenario                = rospy.get_param('/rgbd_data_adapter_img/environment')
+scenario                 = rospy.get_param('/rgbd_data_adapter_img/environment')
+img_type                = rospy.get_param('/rgbd_data_adapter_img/img_type')
 
 #Camera calibration parameters, taken from dataset
 cx = 157.3245865
@@ -52,11 +53,13 @@ rgb_filenames = [ ]
 for file in os.listdir(path_imgs):
     if file.endswith( '.png'):
         filenames.append(file) #append in list all png files located in the given path
-    if 'intensity' in file:
+    if img_type in file:
         rgb_filenames.append(file)
         
 num_files = len(filenames)
 print( 'There are', num_files, 'depth and image png files in the folder in path: \n', path_imgs)
+print( 'The img type to be compiled is:', img_type)
+
 #filenames.sort(key=lambda f: filter(str.isdigit, f) ) #order files names in natural ascending order
 filenames.sort(key=lambda f: int(re.sub('\D', '', f))) 
 rgb_filenames.sort(key=lambda f: int(re.sub('\D', '', f)))    
@@ -139,26 +142,30 @@ def fill_image_msg(img_path, seq, t, frame):
     cv_img = cv2.imread(img_path)     #Use CVbridge to convert image in given path to ros img msg
     cv_img = cv2.rotate(cv_img, cv2.ROTATE_90_COUNTERCLOCKWISE) #rotate image to see it straight in rviz
     height, width = cv_img.shape[:2]
+    #testing para depth data
+    cv_img = cv2.cvtColor(cv_img, cv2.COLOR_BGR2GRAY)
+    cv_img = np.array(cv_img, dtype=np.float32) 
     
-    img_msg_data = bridge.cv2_to_imgmsg(cv_img, encoding="bgr8") #verificar que este bien bgr8
+    img_msg_data = bridge.cv2_to_imgmsg(cv_img, encoding="32FC1") #verificar que este bien bgr8
+    
     img_msg_data.header.seq = seq     #Fill additional ros image msg information
     img_msg_data.header.stamp = t
     img_msg_data.header.frame_id = '/camera'+frame+'/Image' #transform frame name
     img_msg_data.height = height
     img_msg_data.width = width
-    img_msg_data.encoding = 'bgr8' #verificar que este bien bgr8    
+    img_msg_data.encoding = "32FC1"#verificar que este bien bgr8    
     return img_msg_data
 
 
-#Function to populate CameraInfo message
-def fill_CameraInfo_msg(img_path, cx, cy, fx, fy, seq, t, frame): 
+#Function to populate camera_info message
+def fill_camera_info_msg(img_path, cx, cy, fx, fy, seq, t, frame): 
     cv_img = cv2.imread(img_path)     #Use CVbridge to convert image in given path to ros img msg
     cv_img = cv2.rotate(cv_img, cv2.ROTATE_90_COUNTERCLOCKWISE) #rotate image to see it straight in rviz
     height, width = cv_img.shape[:2]  
     cam_info = CameraInfo()
     cam_info.header.seq = seq
     cam_info.header.stamp = t
-    cam_info.header.frame_id = '/camera'+frame+'/CameraInfo'
+    cam_info.header.frame_id = '/camera'+frame+'/camera_info'
     cam_info.height = height
     cam_info.width = width
     cam_info.distortion_model = "plumb_bob"; #most common model used
@@ -199,7 +206,7 @@ def create_TFmsg(x, y, z, roll, pitch, yaw, frame, child_frame, t, seq):
 #### CREATE BAG FILE AND FILL ROS MSGS####
 for j in range (1,5):
     cam_num = j
-    bag = rosbag.Bag('rgbd'+str(cam_num)+'_img_'+scenario+'.bag', 'w') # Open bag file to write data in it
+    bag = rosbag.Bag('rgbd'+str(cam_num)+'_imgD_'+scenario+'.bag', 'w') # Open bag file to write data in it
     #file = open('rgbd'+str(cam_num)+'_img_'+scenario+'.txt', 'w') 
     
     if j == 1:
@@ -222,7 +229,7 @@ for j in range (1,5):
         tstamp_rgb = rgb_file[1][i]      
         
         #Calibration camera message 
-        cam_info_msg = fill_CameraInfo_msg(img_path, cx, cy, fx, fy, i, tstamp_rgb, frame)
+        cam_info_msg = fill_camera_info_msg(img_path, cx, cy, fx, fy, i, tstamp_rgb, frame)
     
         #Image message
         img_msg = fill_image_msg(img_path, i, tstamp_rgb, frame)
@@ -232,25 +239,25 @@ for j in range (1,5):
             tf_data_img = create_TFmsg(0.285,    0.0, 1.045, 0, 0, 0, '/base_link', frame, tstamp_rgb, i) #IMPORTANT el valor de roll lo pase de 90-0 ya que roto las imgs previamente con cv_bridge
             #Write data in bag                              
             bag.write('/camera'+frame+'/Image', img_msg, tstamp_rgb)      
-            bag.write( '/camera'+frame +'/CameraInfo', cam_info_msg, tstamp_rgb)
+            bag.write( '/camera'+frame +'/camera_info', cam_info_msg, tstamp_rgb)
             bag.write('/tf', tf_data_img, tstamp_rgb)        
         elif j == 2:                                                               
             tf_data_img = create_TFmsg(0.271, -0.031, 1.045, 0, 0, -45, '/base_link', frame, tstamp_rgb, i) 
             #Write data in bag                              
             bag.write('/camera'+frame+'/Image', img_msg, tstamp_rgb)      
-            bag.write( '/camera'+frame +'/CameraInfo', cam_info_msg, tstamp_rgb)  
+            bag.write( '/camera'+frame +'/camera_info', cam_info_msg, tstamp_rgb)  
             bag.write('/tf', tf_data_img, tstamp_rgb)        
         elif j == 3:                                                               
             tf_data_img = create_TFmsg(0.271,  0.031, 1.045, 0, 0, 45, '/base_link', frame, tstamp_rgb, i)
             #Write data in bag                              
             bag.write('/camera'+frame+'/Image', img_msg, tstamp_rgb)      
-            bag.write( '/camera'+frame +'/CameraInfo', cam_info_msg, tstamp_rgb)
+            bag.write( '/camera'+frame +'/camera_info', cam_info_msg, tstamp_rgb)
             bag.write('/tf', tf_data_img, tstamp_rgb)         
         elif j == 4:                                                               
             tf_data_img = create_TFmsg(0.240, -0.045, 1.045, 0, 0, -90, '/base_link', frame, tstamp_rgb, i)   
             #Write data in bag
             bag.write('/camera'+frame+'/Image', img_msg, tstamp_rgb)      
-            bag.write( '/camera'+frame +'/CameraInfo', cam_info_msg, tstamp_rgb)    
+            bag.write( '/camera'+frame +'/camera_info', cam_info_msg, tstamp_rgb)    
             bag.write('/tf', tf_data_img, tstamp_rgb)
             
             

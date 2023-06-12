@@ -23,7 +23,7 @@ The output is 4 bag files corresponding to each one of the cameras.
 In the following image it can be seen in the left, the content in each bag file with the topics tf, cameraInfo and image, in the 
 middle the image visualization using the rqt_image_view tool, and in the right the tf tree corresponding to this data. 
 
-![rbgd_image](rgbd_image.png)
+![rbgd_image](rgbd_img_bag.png)
 
 The image data can be visualized either in rviz or using the rqt_image_view tool.
 

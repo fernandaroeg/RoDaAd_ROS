@@ -143,17 +143,16 @@ def fill_image_msg(img_path, seq, t, frame):
     cv_img = cv2.rotate(cv_img, cv2.ROTATE_90_COUNTERCLOCKWISE) #rotate image to see it straight in rviz
     height, width = cv_img.shape[:2]
     #testing para depth data
-    cv_img = cv2.cvtColor(cv_img, cv2.COLOR_BGR2GRAY)
-    cv_img = np.array(cv_img, dtype=np.float32) 
-    
-    img_msg_data = bridge.cv2_to_imgmsg(cv_img, encoding="32FC1") #verificar que este bien bgr8
-    
+    if img_type == "depth":
+        cv_img = cv2.cvtColor(cv_img, cv2.COLOR_BGR2GRAY)
+        cv_img = np.array(cv_img, dtype=np.float32) 
+    img_msg_data = bridge.cv2_to_imgmsg(cv_img, encoding="bgr8") #verificar que este bien bgr8
     img_msg_data.header.seq = seq     #Fill additional ros image msg information
     img_msg_data.header.stamp = t
     img_msg_data.header.frame_id = '/camera'+frame+'/Image' #transform frame name
     img_msg_data.height = height
     img_msg_data.width = width
-    img_msg_data.encoding = "32FC1"#verificar que este bien bgr8    
+    img_msg_data.encoding = "bgr8"#verificar que este bien bgr8    
     return img_msg_data
 
 
@@ -206,7 +205,7 @@ def create_TFmsg(x, y, z, roll, pitch, yaw, frame, child_frame, t, seq):
 #### CREATE BAG FILE AND FILL ROS MSGS####
 for j in range (1,5):
     cam_num = j
-    bag = rosbag.Bag('rgbd'+str(cam_num)+'_imgD_'+scenario+'.bag', 'w') # Open bag file to write data in it
+    bag = rosbag.Bag('rgbd'+str(cam_num)+'_'+img_type+'_'+scenario+'.bag', 'w') # Open bag file to write data in it
     #file = open('rgbd'+str(cam_num)+'_img_'+scenario+'.txt', 'w') 
     
     if j == 1:

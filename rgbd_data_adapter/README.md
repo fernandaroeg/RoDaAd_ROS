@@ -56,7 +56,8 @@ Visualization in rviz of the rgbd data for the environments pare and rx2:
 ## Synchronization Problems
 When running the pointcloud data it is possible to encounter some synchronization problems. In the image below an Rviz error message
 is shown where it states that there is a time difference between the pc data and the rest of the data.
-rviz error
+![rviz_error](synch_error.png)
+
 This error can be fixed by modifying the timestamps of the RGB-D data or by adding a delay, of the amount of time written in the Rviz error, in the launch file where the pointcloud data
 is played, by using the sleep command:
 

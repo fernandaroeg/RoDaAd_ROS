@@ -1,7 +1,7 @@
 <launch>	
     <node pkg="rgbd_data_adapter" type="rgbd_data_adapter_pc.py" name="rgbd_data_adapter_pc" output="screen">
-	<param name="environment"       value="alma" />
-	<param name="rgbd_raw_path"   value="$(find rgbd_data_adapter)/data/alma/fullhouse1_rgbd/" />
-	<param name="tstamp_file"          value="$(find rgbd_data_adapter)/data//alma/fullhouse1_rgbd.txt" />
+	<param name="environment"       value="pare" />
+	<param name="rgbd_raw_path"   value="$(find rgbd_data_adapter)/data/pare/fullhouse1_rgbd/" />
+	<param name="tstamp_file"           value="$(find rgbd_data_adapter)/data/pare/fullhouse1_rgbd.txt" />
     </node>
 </launch>

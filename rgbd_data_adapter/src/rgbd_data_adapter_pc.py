@@ -22,7 +22,6 @@ import cv2
 from cv_bridge import CvBridge
 import std_msgs.msg
 from sensor_msgs.msg import Image, CameraInfo, PointCloud2, PointField
-from sensor_msgs import point_cloud2
 from tf2_msgs.msg import TFMessage 
 from geometry_msgs.msg import TransformStamped
 import tf
@@ -31,10 +30,9 @@ import ctypes
 from datetime import datetime
 import re
 
-
 #File Paths and Parameters
 path_imgs             = rospy.get_param('/rgbd_data_adapter_pc/rgbd_raw_path')
-file_rgbd_tstamps = rospy.get_param('/rgbd_data_adapter_pc/tstamp_file')
+file_rgbd_tstamps= rospy.get_param('/rgbd_data_adapter_pc/tstamp_file')
 scenario                = rospy.get_param('/rgbd_data_adapter_pc/environment')
 
 #Camera calibration parameters, taken from dataset
@@ -60,6 +58,7 @@ print( 'There are', num_files, 'depth and image png files in the folder in path:
 filenames.sort(key=lambda f: int(re.sub('\D', '', f))) 
 depth_filenames.sort(key=lambda f: int(re.sub('\D', '', f)))
 
+    
 #1.2 Logic to put timestamp data transformed from TTimeStamp format to unix epoch
 with open(file_rgbd_tstamps,'r') as tstamps_file:
     tstamp_file= tstamps_file.readlines()
@@ -73,8 +72,14 @@ with open(file_rgbd_tstamps,'r') as tstamps_file:
         mrpt_tstamp = int(tstamp[item]) #MRPT TTimeStamp format must be converted to ROS compatible timestamps
         ros_secs = int(mrpt_tstamp/10000000) - (11644473600) #formulas taken from: http://docs.ros.org/en/jade/api/mrpt_bridge/html/time_8h_source.html#l00027
         ros_nsecs =  (mrpt_tstamp % 10000000) * 100
-        tstamp[item]=rospy.Time(ros_secs,ros_nsecs)#turning the timestamp values to timestamp object  
-  
+        tstamp_txt = rospy.Time(ros_secs,ros_nsecs)#turning the timestamp values to timestamp object  
+        #correccion = rospy.Time(220, 958788100) #alma 
+        #correccion = rospy.Time(2, 277604000) #rx2
+        correccion = rospy.Time(2, 176762000)  #pare
+        tstamp_corregido = tstamp_txt - correccion
+        tstamp[item] = tstamp_corregido
+        #tstamp[item]=rospy.Time(ros_secs,ros_nsecs)#turning the timestamp values to timestamp object  
+
 #1.3 Logic to put RGB-D imgs from the 4 different cameras in separate lists  
     rgbd_id_lines = tstamp_file[4:len(tstamp_file)]
     rgbd_id = []
@@ -86,7 +91,7 @@ D_id1_file_name =  [[], []]
 D_id2_file_name =  [[], []]
 D_id3_file_name =  [[], []]
 D_id4_file_name =  [[], []]
-
+      
 for i in range(0,len(rgbd_id)):
     if '4' in rgbd_id[i]:
         D_id4_file_name[0].append(depth_filenames[i])
@@ -100,8 +105,9 @@ for i in range(0,len(rgbd_id)):
     if '1' in rgbd_id[i]:
         D_id1_file_name[0].append(depth_filenames[i])
         D_id1_file_name[1].append(tstamp[i])
-        
+
 print( "number of timestamps registred   ", len(tstamp) )
+print( "first rgb1 timestamp is ", D_id1_file_name[1][0])
 print( "number of rgbd readings registred", len(rgbd_id))
 print( "number of readings with RGBD_id1", len(D_id1_file_name[0]))
 print( "number of readings with RGBD_id2", len(D_id2_file_name[0]))
@@ -122,13 +128,24 @@ def fill_pointcloud_msg(img_path, cx, cy, fx, fy, seq, t, frame):
     # Extract x,y,z data from depth image. Equations taken from dataset webpage    
 
     points= []
-    for v in range(0,height):
-        for u in range (0, width):
-            pixel = cv_img[v][u]
-            depth = pixel * (1/553.5) # read each single pixel in image
+    # for v in range(0,height):
+        # for u in range (0, width):
+            # pixel = cv_img[v][u]
+            # depth = pixel * (1/553.5) # read each single pixel in image
+            # x = depth
+            # z = (cx- v) * x/fx 
+            # y = (cy- u) * x/fy 
+            # point = [x*10, y*10, z*10]
+            # points.append(point)
+            
+    for h in range(0,height):
+    #for h in range(0,20):
+        for w in range (0, width):
+            pixel = cv_img[h][w]
+            depth = pixel * (1/278.905687) # read each single pixel in image
             x = depth
-            z = (cx- v) * x/fx 
-            y = (cy- u) * x/fy 
+            z = (cx - h) * x/fx 
+            y = (cy - w) * x/fy 
             point = [x*10, y*10, z*10]
             points.append(point)
     
@@ -192,10 +209,14 @@ def create_TFmsg(x, y, z, roll, pitch, yaw, frame, child_frame, t, seq):
 
 
 #### CREATE BAG FILE AND FILL ROS MSGS####
+#for j in range (1,2): #pa solo compilar 1
 for j in range (1,5):
+    # cam_num = 2
     cam_num = j
-    bag = rosbag.Bag('rgbd'+str(cam_num)+'_pc_'+scenario+'.bag', 'w') # Open bag file to write data in it
+    bag = rosbag.Bag('pc'+str(cam_num)+'_'+scenario+'_sincorr.bag', 'w') # Open bag file to write data in it
     #file = open('rgbd'+str(cam_num)+'_pc_'+scenario+'.txt', 'w') 
+    print("DEBUGG")
+    print("j es, ", j)
     
     if j == 1:
         d_file   = D_id1_file_name
@@ -211,21 +232,22 @@ for j in range (1,5):
         frame = 'pc4'
     
     for i in range(0,len(d_file[0])):
-    #for i in range(0,500):
+    #for i in range(0,900):
         dep_path = path_imgs + d_file[0][i]
-        tstamp_rgb = d_file[1][i]      
+        #implementacion original
+        tstamp_rgb = d_file[1][i]
         
         #PointCloud message
         pointcloud_msg = fill_pointcloud_msg(dep_path, cx, cy, fx, fy, i, tstamp_rgb, frame)
 
         #TF data 
         if   j == 1:
-            tf_data_pc = create_TFmsg(0.285,    0.0, 1.045, 0, 0, 0, 'base_link', frame, tstamp_rgb, i) #IMPORTANT el valor de roll lo pase de 90-0 ya que roto las imgs previamente con cv_bridge
+            tf_data_pc = create_TFmsg(0.271, -0.031, 1.045, 0, 0, -45, 'base_link', frame, tstamp_rgb, i) 
             #Write data in bag                              
             bag.write(frame, pointcloud_msg, tstamp_rgb)    
             bag.write('tf', tf_data_pc, tstamp_rgb)        
         elif j == 2:                                                               
-            tf_data_pc = create_TFmsg(0.271, -0.031, 1.045, 0, 0, -45, 'base_link', frame, tstamp_rgb, i) 
+            tf_data_pc = create_TFmsg(0.240, -0.045, 1.045, 0, 0, -90, 'base_link', frame, tstamp_rgb, i) #IMPORTANT el valor de roll lo pase de 90-0 ya que roto las imgs previamente con cv_bridge
             #Write data in bag                              
             bag.write(frame, pointcloud_msg, tstamp_rgb)    
             bag.write('tf', tf_data_pc, tstamp_rgb)        
@@ -235,7 +257,7 @@ for j in range (1,5):
             bag.write(frame, pointcloud_msg, tstamp_rgb)    
             bag.write('tf', tf_data_pc, tstamp_rgb)         
         elif j == 4:                                                               
-            tf_data_pc = create_TFmsg(0.240, -0.045, 1.045, 0, 0, -90, 'base_link', frame, tstamp_rgb, i)   
+            tf_data_pc = create_TFmsg(0.285,    0.0, 1.045, 0, 0, 0, 'base_link', frame, tstamp_rgb, i)   
             #Write data in bag
             bag.write(frame, pointcloud_msg, tstamp_rgb)      
             bag.write('tf', tf_data_pc, tstamp_rgb)
@@ -243,7 +265,7 @@ for j in range (1,5):
         #Write data in bag
         bag.write(frame, pointcloud_msg, tstamp_rgb)      
         bag.write('tf', tf_data_pc, tstamp_rgb)
-                
+        
         #Export generated data for debugging purposes
         #ts = tstamp_rgb.to_time()
         #ts = int(ts)

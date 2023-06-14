@@ -1,13 +1,19 @@
 <launch>
-	<node pkg="rgbd_data_adapter" type="depth_to_laser_adapter.py" name="depth_to_laser_adapter" output="screen">
-
+	<node pkg="depth_to_laser" type="depth_to_laser_adapter" name="depth_to_laser_adapter" output="screen">
 	<param name="rgbd_id"                      value="1"  />
 	<param name="TF_x"                          value="0.271"  />
 	<param name="TF_y"                          value="-0.031"  />
 	<param name="TF_z"                          value="1.045"  />
 	<param name="TF_yaw"                         value="-45"  />
 	<param name="pc_to_laser_topic"    value="depth"  />
-
 	</node>	
+	
+	<!-- Play PointCloud rosbags -->
+	<arg name="path" default="/home/fer/.ros/"/>
+	<arg name="file" default="depth_rx2_pc1"/>                                       
+	<node name="player" pkg="rosbag" type="play" output="screen" args=" $(arg path)$(arg file).bag" />
+	
+	 <node pkg="rosbag" type="record" name="record" args="record -O /home/fer/Desktop/virtual_laser_rx1.bag /laser /tf" output="screen"/>  
+
 </launch>
 

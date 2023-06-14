@@ -213,7 +213,7 @@ def create_TFmsg(x, y, z, roll, pitch, yaw, frame, child_frame, t, seq):
 for j in range (1,5):
     # cam_num = 2
     cam_num = j
-    bag = rosbag.Bag('pc'+str(cam_num)+'_'+scenario+'_sincorr.bag', 'w') # Open bag file to write data in it
+    bag = rosbag.Bag('pc'+str(cam_num)+'_'+scenario+'_.bag', 'w') # Open bag file to write data in it
     #file = open('rgbd'+str(cam_num)+'_pc_'+scenario+'.txt', 'w') 
     print("DEBUGG")
     print("j es, ", j)

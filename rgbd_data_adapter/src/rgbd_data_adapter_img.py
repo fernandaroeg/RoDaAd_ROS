@@ -144,15 +144,17 @@ def fill_image_msg(img_path, seq, t, frame):
     height, width = cv_img.shape[:2]
     #testing para depth data
     if img_type == "depth":
-        cv_img = cv2.cvtColor(cv_img, cv2.COLOR_BGR2GRAY)
-        cv_img = np.array(cv_img, dtype=np.float32) 
-    img_msg_data = bridge.cv2_to_imgmsg(cv_img, encoding="bgr8") #verificar que este bien bgr8
+        #cv_img = cv2.cvtColor(cv_img, cv2.COLOR_BGR2GRAY)
+        #cv_img = np.array(cv_img, dtype=np.float32)
+        img_msg_data = bridge.cv2_to_imgmsg(cv_img, encoding="8UC3")
+    else:
+        img_msg_data = bridge.cv2_to_imgmsg(cv_img, encoding="bgr8")
+    img_msg_data.encoding = "bgr8"
     img_msg_data.header.seq = seq     #Fill additional ros image msg information
     img_msg_data.header.stamp = t
     img_msg_data.header.frame_id = '/camera'+frame+'/Image' #transform frame name
     img_msg_data.height = height
     img_msg_data.width = width
-    img_msg_data.encoding = "bgr8"#verificar que este bien bgr8    
     return img_msg_data
 
 

@@ -9,6 +9,12 @@ project(rgbd_data_adapter)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   rospy
+  geometry_msgs
+  roscpp
+  sensor_msgs
+  std_msgs
+  tf
+  tf2
 )
 
 ## System dependencies are found with CMake's conventions
@@ -147,6 +153,17 @@ include_directories(
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
+
+add_executable(depth_to_laser_adapter src/depth_to_laser_adapter.cpp) 
+
+add_dependencies(depth_to_laser_adapter${depth_to_laser_adapter_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS}) 
+
+target_link_libraries(depth_to_laser_adapter 
+
+${catkin_LIBRARIES} 
+
+) 
+
 
 #############
 ## Install ##

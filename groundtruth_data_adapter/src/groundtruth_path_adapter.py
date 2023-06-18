@@ -75,7 +75,7 @@ def create_TFmsg(x, y, z, theta, frame, child_frame, t, seq):
 #List names with data to write from groundtruth: poseX, poseY, poseTheta, tstamp
 #file = open('odom_debug.txt', 'w') #create txt file to export odom data for debugging purposes
 
-bag = rosbag.Bag('groundtruth_path'+'_'+scenario+'.bag', 'w')
+bag = rosbag.Bag('groundtruth_amcl_path'+'_'+scenario+'.bag', 'w')
 path= Path()
 
 for i in range(0,len(poseX)):
@@ -93,6 +93,7 @@ for i in range(0,len(poseX)):
     g_truth_path_tf = create_TFmsg(poseX[i], poseY[i], 0, poseTheta[i], "map", "base_link",tstamp[i], i)
  
     #Write data to bag
+    #bag.write("g_truth/Pose", g_truth_pose, tstamp[i])
     bag.write("tf", g_truth_path_tf, tstamp[i])
     bag.write("base_link", path, tstamp[i])
     

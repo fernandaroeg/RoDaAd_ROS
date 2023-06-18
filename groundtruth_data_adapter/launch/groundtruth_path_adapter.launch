@@ -1,8 +1,8 @@
 <launch>	
     <node pkg="groundtruth_data_adapter" type="groundtruth_path_adapter.py" name="groundtruth_data_adapter" output="screen">
-	<param name="environment"    value="alma" />
-	<param name="gtruth_file"      value="$(find groundtruth_data_adapter)/data/alma/log_estimated_path.txt" />
-	<param name="tstamp_file"    value="$(find groundtruth_data_adapter)/data/alma/1_hokuyo_processed.txt" />
+	<param name="environment"    value="pare" />
+	<param name="gtruth_file"      value="$(find groundtruth_data_adapter)/data/pare/log_estimated_path.txt" />
+	<param name="tstamp_file"    value="$(find groundtruth_data_adapter)/data/pare/1_hokuyo_processed.txt" />
 	
     </node>
 </launch>

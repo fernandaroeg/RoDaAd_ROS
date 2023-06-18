@@ -120,7 +120,7 @@ print( "number of readings with RGBD_id4", len(D_id4_file_name[0]))
 #Function to populate point cloud message
 def fill_pointcloud_msg(img_path, cx, cy, fx, fy, seq, t, frame):
     #Image pre-processing
-    cv_img = cv2.imread(img_path)     #Use CVbridge to convert image in given path to ros img msg
+    cv_img = cv2.imread(img_path)   
     cv_img = cv2.rotate(cv_img, cv2.ROTATE_90_COUNTERCLOCKWISE) #rotate image to see it straight in rviz
     cv_img = cv2.cvtColor(cv_img, cv2.COLOR_BGR2GRAY) #reduce rgb dimension to grayscale
     height, width = cv_img.shape[:2]

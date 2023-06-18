@@ -242,17 +242,17 @@ for j in range (1,5):
 
         #TF data 
         if   j == 1:
-            tf_data_pc = create_TFmsg(0.271, -0.031, 1.045, 0, 0, -45, 'base_link', frame, tstamp_rgb, i) 
+            tf_data_pc = create_TFmsg(0.271, -0.031, 1.045, 0, 0, -0.7854, 'base_link', frame, tstamp_rgb, i) 
             #Write data in bag                              
             bag.write(frame, pointcloud_msg, tstamp_rgb)    
             bag.write('tf', tf_data_pc, tstamp_rgb)        
         elif j == 2:                                                               
-            tf_data_pc = create_TFmsg(0.240, -0.045, 1.045, 0, 0, -90, 'base_link', frame, tstamp_rgb, i) #IMPORTANT el valor de roll lo pase de 90-0 ya que roto las imgs previamente con cv_bridge
+            tf_data_pc = create_TFmsg(0.240, -0.045, 1.045, 0, 0, -1.5708, 'base_link', frame, tstamp_rgb, i) #IMPORTANT el valor de roll lo pase de 90-0 ya que roto las imgs previamente con cv_bridge
             #Write data in bag                              
             bag.write(frame, pointcloud_msg, tstamp_rgb)    
             bag.write('tf', tf_data_pc, tstamp_rgb)        
         elif j == 3:                                                               
-            tf_data_pc = create_TFmsg(0.271,  0.031, 1.045, 0, 0, 45, 'base_link', frame, tstamp_rgb, i)
+            tf_data_pc = create_TFmsg(0.271,  0.031, 1.045, 0, 0, 0.7854, 'base_link', frame, tstamp_rgb, i)
             #Write data in bag                              
             bag.write(frame, pointcloud_msg, tstamp_rgb)    
             bag.write('tf', tf_data_pc, tstamp_rgb)         
@@ -275,4 +275,3 @@ for j in range (1,5):
         
     bag.close()
     #file.close() #close debugging txt file
-

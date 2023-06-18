@@ -4,7 +4,7 @@
 	<param name="TF_x"                          value="0.271"  />
 	<param name="TF_y"                          value="-0.031"  />
 	<param name="TF_z"                          value="1.045"  />
-	<param name="TF_yaw"                         value="-45"  />
+	<param name="TF_yaw"                         value="-0.7854"  /> <!-- 45° en radianes -->
 	<param name="pc_to_laser_topic"    value="depth"  />
 	</node>	
 	

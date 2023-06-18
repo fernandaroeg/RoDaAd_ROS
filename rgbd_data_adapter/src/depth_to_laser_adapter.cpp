@@ -88,7 +88,11 @@ int main(int argc, char **argv)
 		static tf::TransformBroadcaster br;
 		tf::Transform transform;
 		transform.setOrigin( tf::Vector3(TF_x, TF_y, TF_z) );
-		transform.setRotation( tf::Quaternion(TF_yaw, 0, 0) );
+		
+		tf::Quaternion q;
+		q.setRPY(0, 0, TF_yaw);		
+		transform.setRotation( q );
+		//transform.setRotation( tf::Quaternion(TF_yaw, 0, 0) );
 		br.sendTransform(tf::StampedTransform(transform, scan_received.header.stamp, "base_link", "laser"));
 
 		ros::spinOnce();  //check for incoming messages

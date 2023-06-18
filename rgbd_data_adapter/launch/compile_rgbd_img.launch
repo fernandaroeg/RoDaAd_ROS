@@ -1,8 +1,8 @@
 <launch>	
     <node pkg="rgbd_data_adapter" type="rgbd_data_adapter_img.py" name="rgbd_data_adapter_img" output="screen">
-	<param name="environment"      value="rx2" />
+	<param name="environment"      value="pare" />
 	<param name="img_type"      value="depth" />  <!-- options: intensity, depth -->
-	<param name="rgbd_raw_path"  value="$(find rgbd_data_adapter)/data//rx2/fullhouse1_rgbd/" />
-	<param name="tstamp_file"         value="$(find rgbd_data_adapter)/data//rx2/fullhouse1_rgbd.txt" />
+	<param name="rgbd_raw_path"  value="$(find rgbd_data_adapter)/data//pare/fullhouse1_rgbd/" />
+	<param name="tstamp_file"         value="$(find rgbd_data_adapter)/data//pare/fullhouse1_rgbd.txt" />
     </node>
 </launch>
